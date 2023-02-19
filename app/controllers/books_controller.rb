@@ -2,7 +2,8 @@ class BooksController < ApplicationController
   before_action :set_book, only: %i[ show edit update destroy ]
 
   def index
-    @books = Book.all
+    @books = Book.order(created_at: :desc)
+    @book = Book.new
   end
 
   def show; end
@@ -14,10 +15,12 @@ class BooksController < ApplicationController
 
   def create
     @book = Book.new(book_params)
+
     respond_to do |format|
       if @book.save
-        format.html { redirect_to book_url(@book) }
+        format.html { redirect_to root_path }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@book, partial: 'books/form', locals: { book: @book }) }
         format.html { render :new }
       end
     end
@@ -26,7 +29,7 @@ class BooksController < ApplicationController
   def update
     respond_to do |format|
       if @book.update(book_params)
-        format.html { redirect_to book_url(@book) }
+        format.html { redirect_to root_path }
       else
         format.html { render :edit }
       end

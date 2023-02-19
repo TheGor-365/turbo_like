@@ -1,17 +1,11 @@
-<div id="<%= dom_id book %>">
-  <p>
-    <strong>Title:</strong>
-    <%= book.title %>
-  </p>
+<%= turbo_stream_from "book#{book.id}" %>
 
-  <p>
-    <strong>Description:</strong>
-    <%= book.description %>
-  </p>
-
-  <p>
-    <strong>Likes:</strong>
-    <%= book.likes %>
-  </p>
-
-</div>
+<%= turbo_frame_tag "book_#{book.id}" do %>
+  <div class="p-5 shadow rounded">
+    <h2><%= book.title %></h2>
+    <p><%= book.description %></p>
+    <br>
+    <%= button_to "Like (#{book.likes})", book_path(book, book: { likes: (book.likes + 1) }), method: :put, class: "btn btn-sm btn-success" %>
+  </div>
+  <br/>
+<% end %>

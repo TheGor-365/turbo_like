@@ -1,14 +1,11 @@
-<p style="color: green"><%= notice %></p>
-
 <h1>Books</h1>
 
-<div id="books">
-  <% @books.each do |book| %>
-    <%= render book %>
-    <p>
-      <%= link_to "Show this book", book %>
-    </p>
-  <% end %>
-</div>
+<%= turbo_stream_from :books %>
 
-<%= link_to "New book", new_book_path %>
+<%= turbo_frame_tag :book_form do %>
+  <%= render 'books/form', book: @book %>
+<% end %>
+
+<%= turbo_frame_tag :books do %>
+  <%= render @books %>
+<% end %>
